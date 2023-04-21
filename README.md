@@ -29,12 +29,12 @@
 |----|--------|-----------|--------|-------|
 |    | from a | from c    |        |       |
 
-**nt19order**
-| id | customer | date | total |
-|----|----------|------|-------|
-| d  | from b   |      |       |
+**nt19orders**
+| id | customer | dated | total |
+|----|----------|-------|-------|
+| d  | from b   |       |       |
 
 **nt19orderedProducts**
-| id | orderNr | productNr | amount |
+| id | orderId | productId | amount |
 |----|---------|-----------|--------|
 |    | from d  | from c    |        |
