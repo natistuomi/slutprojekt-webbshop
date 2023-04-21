@@ -15,9 +15,9 @@
 **Tabeller i databasen:**
 
 **nt19loginInfo**
-| id | username | password | firstname | lastname | access |
-|----|----------|----------|-----------|----------|--------|
-| a  |          |          | b         | b        | admin? |
+| id | username | password | firstname | lastname | accessLevel |
+|----|----------|----------|-----------|----------|-------------|
+| a  |          |          | b         | b        | admin?      |
 
 **nt19products**
 | id | name | price | amount |
