@@ -6,7 +6,7 @@
 |    | Tis                    | Fre                      |
 |----|------------------------|--------------------------|
 | 16 | X                      | Planering                |
-| 17 | Set-up m databaser     | Front-end                |
+| 17 | Set-up m databaser     | Strukturera              |
 | 18 | Login & Shopping cart  | Shopping cart            |
 | 19 | Buy routes             | Buy routes               |
 | 20 | Error-hantering        | X                        |
@@ -38,3 +38,17 @@
 | id | orderId | productId | amount |
 |----|---------|-----------|--------|
 |    | from d  | from c    |        |
+
+## Loggbok
+
+**v.16 - 21 april 2023**
+
+Har gjort:
+- Kommit fram till ett projekt och skapat ett repo med planering i README.md
+- Planerat i skissblock hur sidan ska fungera och hur tabellerna ska se ut. Även lite grafiskt
+- Skapat tabeller i databas (vilket var planen för nästa lektion)
+
+Nästa gång:
+- Skapa relevanta filer och mappar i repo
+- Ladda ner paket
+- Gå vidare till att strukturera upp elementen som behövs för funktioner och liknande
