@@ -59,5 +59,7 @@ Har gjort:
 - Skapat grundläggande filstruktur
 - Laddat ner relevanta paket
 - Fixat ett fungerande login och register
+- Påbörjat varukorg
 
 Nästa gång:
+- Fixa färdigt varukorgen

@@ -5,12 +5,15 @@ const pool = require('../utils/database');
 const session = require('express-session');
 const { render } = require('nunjucks');
 const validator = require('validator');
+const { runInNewContext } = require('vm');
 const promisePool = pool.promise();
 
 //router för förstasidan
 router.get('/', async function(req, res, next){
+    const [rows] = await promisePool.query("SELECT * FROM nt19products");
     res.render('index.njk', {
         title: 'Homepage',
+        rows: rows,
         loggedIn: req.session.userId||0
     });
 });
@@ -100,6 +103,28 @@ router.post('/register', async function(req, res, next){
                 res.redirect('/login');
             });                
         }
+    }
+});
+
+//router för varukorgen
+router.get('/cart', async function(req, res, next){
+    const [rows] = await promisePool.query("SELECT nt19cart.* WHERE nt19userId = ?, nt19products.name AS product FROM nt19cart JOIN nt19products on nt19cart.productId = nt19products.id", [req.session.userId]);
+    res.render('cart.njk', {
+        title: 'Varukorg',
+        loggedIn: req.session.userId||0,
+        rows: rows
+    });
+});
+
+router.post('/addToCart', async function(req, res, next){
+    req.session.userId
+    const {productId} = req.body;
+    if(req.session.loggedIn){
+        const [rows] = await promisePool.query("INSERT INTO nt19cart (userId, productId) VALUES (?, ?)', [req.session.userId, productId]");
+        res.redirect('/');
+    }
+    else{
+        res.redirect('/login');
     }
 });
 

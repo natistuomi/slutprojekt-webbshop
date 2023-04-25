@@ -8,8 +8,9 @@
             <p>Pris: {{ row.price  }}</p>
             {% if loggedIn != 0 %}
                 <form action="/addToCart" method="POST">
-                <button type="submit">Lägg i varukorgen</button>
-            </form>
+                    <input type="hidden" name="productId" value="{{ row.id }}">
+                    <button type="submit">Lägg i varukorgen</button>
+                </form>
             {% else %}
                 <p>Logga in för att handla</p>
             {% endif %}
