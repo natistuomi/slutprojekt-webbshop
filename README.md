@@ -52,3 +52,10 @@ Nästa gång:
 - Skapa relevanta filer och mappar i repo
 - Ladda ner paket
 - Gå vidare till att strukturera upp elementen som behövs för funktioner och liknande
+
+**v.17 - 25 april 2023**
+
+Har gjort:
+- Skapat grundläggande filstruktur
+
+Nästa gång:
