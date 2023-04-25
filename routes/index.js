@@ -117,7 +117,6 @@ router.get('/cart', async function(req, res, next){
 });
 
 router.post('/addToCart', async function(req, res, next){
-    req.session.userId
     const {productId} = req.body;
     if(req.session.loggedIn){
         const [rows] = await promisePool.query("INSERT INTO nt19cart (userId, productId) VALUES (?, ?)', [req.session.userId, productId]");
