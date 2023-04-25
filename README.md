@@ -57,5 +57,6 @@ Nästa gång:
 
 Har gjort:
 - Skapat grundläggande filstruktur
+- Laddat ner relevanta paket
 
 Nästa gång:
