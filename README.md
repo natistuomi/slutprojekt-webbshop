@@ -58,5 +58,6 @@ Nästa gång:
 Har gjort:
 - Skapat grundläggande filstruktur
 - Laddat ner relevanta paket
+- Fixat ett fungerande login och register
 
 Nästa gång:
