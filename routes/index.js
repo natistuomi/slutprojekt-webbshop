@@ -108,19 +108,33 @@ router.post('/register', async function(req, res, next){
 
 //router för varukorgen
 router.get('/cart', async function(req, res, next){
-    const [rows] = await promisePool.query("SELECT nt19cart.* WHERE nt19userId = ?, nt19products.name AS product FROM nt19cart JOIN nt19products on nt19cart.productId = nt19products.id", [req.session.userId]);
+    const [rows] = await promisePool.query('SELECT * FROM nt19cart WHERE nt19cart.userId = ?', [req.session.userId]);
+    const [name] = await promisePool.query('SELECT * FROM nt19products');
     res.render('cart.njk', {
         title: 'Varukorg',
         loggedIn: req.session.userId||0,
-        rows: rows
+        rows: rows,
+        name: name
     });
 });
 
 router.post('/addToCart', async function(req, res, next){
-    const {productId} = req.body;
-    if(req.session.loggedIn){
-        const [rows] = await promisePool.query("INSERT INTO nt19cart (userId, productId) VALUES (?, ?)', [req.session.userId, productId]");
+    const productId = req.body.productId;
+    if(req.session.loggedin){
+        const [rows] = await promisePool.query('INSERT INTO nt19cart (userId, productId) VALUES (?, ?)', [req.session.userId, productId]);
         res.redirect('/');
+    }
+    else{
+        res.redirect('/login');
+    }
+});
+
+router.post('/removeFromCart', async function(req, res, next){
+    const cartId = req.body.id;
+    console.log(cartId);
+    if(req.session.loggedin){
+        await promisePool.query('DELETE FROM nt19cart WHERE id = ?', [cartId]);
+        res.redirect('/cart');
     }
     else{
         res.redirect('/login');

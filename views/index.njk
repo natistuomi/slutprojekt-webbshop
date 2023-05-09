@@ -6,10 +6,12 @@
             <h2>{{ row.name }}</h2>
             <p>Lager: {{ row.amount }}</p>
             <p>Pris: {{ row.price  }}</p>
+            <p>ID: {{ row.id }}</p>
             {% if loggedIn != 0 %}
                 <form action="/addToCart" method="POST">
-                <button type="submit">Lägg i varukorgen</button>
-            </form>
+                    <input type="hidden" name="productId" value="{{ row.id }}">
+                    <button type="submit">Lägg i varukorgen</button>
+                </form>
             {% else %}
                 <p>Logga in för att handla</p>
             {% endif %}
