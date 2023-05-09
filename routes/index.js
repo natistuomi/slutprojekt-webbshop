@@ -6,6 +6,7 @@ const session = require('express-session');
 const { render } = require('nunjucks');
 const validator = require('validator');
 const { runInNewContext } = require('vm');
+const { Console } = require('console');
 const promisePool = pool.promise();
 
 //router för förstasidan
@@ -121,7 +122,15 @@ router.get('/cart', async function(req, res, next){
 router.post('/addToCart', async function(req, res, next){
     const productId = req.body.productId;
     if(req.session.loggedin){
-        const [rows] = await promisePool.query('INSERT INTO nt19cart (userId, productId) VALUES (?, ?)', [req.session.userId, productId]);
+        // if userId AND productId already exists in cart -> add amount
+        const oldCart = await promisePool.query('SELECT * FROM nt19cart WHERE userId = ? AND productId = ?', [req.session.userId, productId]);
+        if(oldCart.length > 0){
+            const newAmount = oldCart[0][0].amount + 1;
+            await promisePool.query('UPDATE nt19cart SET amount = ? WHERE userID = ? AND productId = ?', [newAmount, req.session.userId, productId]);
+        }
+        else{
+            await promisePool.query('INSERT INTO nt19cart (userId, productId) VALUES (?, ?)', [req.session.userId, productId]);
+        }
         res.redirect('/');
     }
     else{
@@ -134,6 +143,27 @@ router.post('/removeFromCart', async function(req, res, next){
     console.log(cartId);
     if(req.session.loggedin){
         await promisePool.query('DELETE FROM nt19cart WHERE id = ?', [cartId]);
+        res.redirect('/cart');
+    }
+    else{
+        res.redirect('/login');
+    }
+});
+
+//router för beställningar
+
+router.post('/placeOrder', async function(req, res, next){
+    //customer X, customerId X, total
+    //orderId ^, productId, amount
+    const customerId = req.session.userId;
+    const names = await promisePool.query('SELECT * FROM nt19loginInfo WHERE id = ?', [customerId]);
+    const customer = names[0][0].firstname + " " + names[0][0].lastname;
+    const products = await promisePool.query('SELECT * FROM nt19cart WHERE userId = ?', [req.session.userId]);
+    console.log("Products: " + products.length);
+    if(req.session.loggedin){
+        //INSERT order
+        //INSERT orderedProducts
+        //Empty cart
         res.redirect('/cart');
     }
     else{

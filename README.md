@@ -30,9 +30,9 @@
 |    | from a | from c    |        |       |
 
 **nt19orders**
-| id | customer | dated | total |
-|----|----------|-------|-------|
-| d  | from b   |       |       |
+| id | customerId | customer | dated | total |
+|----|------------|----------|-------|-------|
+| d  | from a     | from b   |       |       |
 
 **nt19orderedProducts**
 | id | orderId | productId | amount |
