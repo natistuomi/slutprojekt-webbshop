@@ -159,10 +159,18 @@ router.post('/placeOrder', async function(req, res, next){
     const names = await promisePool.query('SELECT * FROM nt19loginInfo WHERE id = ?', [customerId]);
     const customer = names[0][0].firstname + " " + names[0][0].lastname;
     const products = await promisePool.query('SELECT * FROM nt19cart WHERE userId = ?', [req.session.userId]);
-    console.log("Products: " + products.length);
+    let total = 0;
+    for(let i = 0; i < products.length; i++){
+        total += (products[0][i].amount * products[0][i].price);
+    }
     if(req.session.loggedin){
         //INSERT order
+        await promisePool.query('INSERT INTO nt19orders (customer, total, customerId) VALUES (?,?,?)', [customer, total, req.session.userId]);
         //INSERT orderedProducts
+        const orderId = await promisePool.query('SELECT id FROM nt19orders WHERE customerId = ? ORDER BY dated DESC', [req.session.userId]);
+        for(let i = 0; i < products.length; i++){
+            await promisePool.query('INSERT INTO nt19orderedProducts (orderId, productId, amount) VALUES (?,?,?)', [orderId[0], product[0][i].id, product[0][i].amount]);
+        }
         //Empty cart
         res.redirect('/cart');
     }
