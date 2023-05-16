@@ -2,7 +2,7 @@
 {% block content %}
     <ul>
     {% for row in rows %}
-        <li>
+        <li class="product-card">
             <h2>{{ row.name }}</h2>
             <p>Lager: {{ row.amount }}</p>
             <p>Pris: {{ row.price  }}</p>
@@ -13,7 +13,7 @@
                     <button type="submit">Lägg i varukorgen</button>
                 </form>
             {% else %}
-                <p>Logga in för att handla</p>
+                <p class="red-text">Logga in för att handla</p>
             {% endif %}
         </li>
     {% endfor %}

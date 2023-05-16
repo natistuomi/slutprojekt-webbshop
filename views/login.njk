@@ -1,13 +1,14 @@
 {% extends "layout.njk" %}
 {% block  content %}
 
+<h2>Logga in</h2>
 <form action="/login" method="POST" class="login">
     <label for="username">Användarnamn</label>
     <input type="text" name="username" id="username">
     <label for="password">Lösenord</label>
     <input type="password" name="password" id="password">
     <div class="buttons">
-        <button type="submit">Logga in</button>
+        <button type="submit" class="left">Logga in</button>
         <a href="/register">eller registrera en ny användare</a>
     </div>
 </form>

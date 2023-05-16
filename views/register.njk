@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 {% block  content %}
 
+<h2>Registrera dig</h2>
 <form action="/register" method="POST" class="register">
     <label for="firstname">Förnamn</label>
     <input type="text" name="firstname" id="firstname">
@@ -12,7 +13,9 @@
     <input type="password" name="password" id="password">
     <label for="passwordConfirmation">Upprepa lösenord</label>
     <input type="password" name="passwordConfirmation" id="passwordConfirmation">
-    <button type="submit">Registrera användare</button>
+    <div class="buttons">
+        <button type="submit">Registrera användare</button>
+    </div>
 </form>
 
 {% endblock %}

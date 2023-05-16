@@ -1,17 +1,16 @@
 <header>
-    {% if loggedIn != 0 %}
-        <h1>Logged in</h1>
-    {% else %}
-        <h1>Not logged in</h1>
-    {% endif %}
+    <img src="/images/logo.jpg" alt="textilestudios logotyp">
 </header>
 <nav>
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/login">Login</a></li>
-        <li><a href="/register">Register</a></li>
+    <div>
+        <a href="/" class="left">Butik</a>
+    </div>
+    <div>
         {% if loggedIn != 0 %}
-            <li><a href="/cart">Varukorg</a></li>
+            <a href="/cart" class="right">Varukorg</a>
+        {% else %}
+            <a href="/login" class="right">Logga in</a>
+            <a href="/register" class="right">Registrera</a>
         {% endif %}
-    </ul>
+    </div>
 </nav>

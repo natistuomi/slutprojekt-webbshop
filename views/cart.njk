@@ -2,11 +2,11 @@
 {% block content %}
     <ul>
     {% for row in rows %}
-        <li>
+        <li class="product-card">
             <h2>{{ name[row.productId-1].name }}</h2>
             <p>Pris: {{ row.price  }}</p>
             <p>Antal: {{ row.amount }}</p>
-            <form action="/removeFromCart" method="POST">
+            <form action="/removeFromCart" method="POST" class="red-button">
                 <input type="hidden" name="id" value="{{ row.id }}">
                 <button type="submit">Ta bort från varukorgen</button>
             </form>
