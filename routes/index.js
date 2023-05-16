@@ -167,11 +167,12 @@ router.post('/placeOrder', async function(req, res, next){
         //INSERT order
         await promisePool.query('INSERT INTO nt19orders (customer, total, customerId) VALUES (?,?,?)', [customer, total, req.session.userId]);
         //INSERT orderedProducts
+        //Empty cart
         const orderId = await promisePool.query('SELECT id FROM nt19orders WHERE customerId = ? ORDER BY dated DESC', [req.session.userId]);
         for(let i = 0; i < products.length; i++){
-            await promisePool.query('INSERT INTO nt19orderedProducts (orderId, productId, amount) VALUES (?,?,?)', [orderId[0], product[0][i].id, product[0][i].amount]);
+            await promisePool.query('INSERT INTO nt19orderedProducts (orderId, productId, amount) VALUES (?,?,?)', [orderId[0][0].id, products[0][i].id, products[0][i].amount]);
         }
-        //Empty cart
+        await promisePool.query('DELETE FROM nt19cart WHERE userId = ?', [req.session.userId]);
         res.redirect('/cart');
     }
     else{
