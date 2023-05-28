@@ -58,7 +58,7 @@ body{
             label{
                 margin-bottom: .5rem;
             }
-            input{
+            input, select{
                 margin-bottom: .5rem;
                 padding: .5rem;
             }
@@ -111,6 +111,24 @@ body{
             color: #85bc44;
             text-decoration: none;
             cursor: pointer;
+        }
+        table{
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid var(--color-black);
+            th, td{
+                padding: .5rem;
+                border: 1px solid var(--color-black);
+                text-align: left;
+            }
+            th{
+                background-color: #282923;
+                color: #ffffff;
+            }
+            td{
+                background-color: #85bc44;
+                color: #282923;
+            }
         }
     }
     footer{

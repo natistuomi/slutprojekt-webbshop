@@ -1,0 +1,57 @@
+{% extends "layout.njk" %}
+{% block  content %}
+
+    <h1>Lager</h1>
+
+    <div style="overflow-x:auto;">
+        <table>
+        <tr>
+            <th>Produktnamn</th>
+            <th>Lagerantal</th>
+            <th>Pris</th>
+        </tr>
+        {% for row in rows %}
+            <tr>
+                <td>{{ row.name }}</td>
+                <td>{{ row.amount }}</td>
+                <td>{{ row.price }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+
+    <br>
+
+    <h2>Redigera befintlig produkt</h2>
+    <form action="/updateProduct" method="POST">
+        <label for="name">Produktnamn</label>
+        <select id="name" name="name">
+            {% for row in rows %}
+            <option value="{{row.name}}">{{row.name}}</option>
+            {% endfor %}
+        </select>
+        <label for="amount">Lagerantal</label>
+        <input type="number" id="amount" name="amount" min="0" max="100">
+        <label for="price">Pris</label>
+        <input type="number" id="price" name="price" min="1" max="1000">
+        <button type="submit">Uppdatera</button>
+    </form>
+
+    <br>
+
+    <h2>Ny produkt</h2>
+    <form action="/newProduct" method="POST">
+        <label for="name">Produktnamn</label>
+        <input type="text" name="name" id="name">
+        <label for="amount">Lagerantal</label>
+        <input type="number" id="amount" name="amount" min="0" max="100">
+        <label for="price">Pris</label>
+        <input type="number" id="price" name="price" min="1" max="1000">
+        <label for="pic">Bildnamn</label>
+        <input type="text" name="pic" id="pic">
+        <button type="submit">Lägg till</button>
+    </form>
+
+    
+
+{% endblock %}

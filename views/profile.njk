@@ -1,0 +1,13 @@
+{% extends "layout.njk" %}
+{% block  content %}
+
+    <h1>Min profil</h1>
+    <p>Användarnamn: {{username}}</p>
+    
+    <form action="/logout" method="POST">
+    <button type="submit">Logga ut</button>
+    </form>
+
+    
+
+{% endblock %}

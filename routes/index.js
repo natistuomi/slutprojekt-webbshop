@@ -15,7 +15,8 @@ router.get('/', async function(req, res, next){
     res.render('index.njk', {
         title: 'Homepage',
         rows: rows,
-        loggedIn: req.session.userId||0
+        loggedIn: req.session.userId||0,
+        admin: req.session.admin
     });
 });
 
@@ -23,7 +24,8 @@ router.get('/', async function(req, res, next){
 router.get('/login', function(req, res, next){
     res.render('login.njk', {
         title: 'Login',
-        loggedIn: req.session.userId||0
+        loggedIn: req.session.userId||0,
+        admin: req.session.admin
     });
 });
 
@@ -41,12 +43,14 @@ router.post('/login', async function (req, res, next) {
             const [rows, query] = await promisePool.query('SELECT password FROM nt19loginInfo WHERE username = ?', [username]);
             const bcryptPassword = rows[0].password
             const userId = await promisePool.query("SELECT nt19loginInfo.id FROM nt19loginInfo WHERE username = ?", [username]);
+            const access = await promisePool.query('SELECT nt19loginInfo.accessLevel FROM nt19loginInfo WHERE username = ?', [username]);
             bcrypt.compare(password, bcryptPassword , function(err, result) {
                 if(result){
                     req.session.loggedin = true;
+                    req.session.admin = access[0][0].accessLevel;
                     req.session.username = username;
                     req.session.userId = userId[0][0].id;
-                    res.redirect('/');
+                    res.redirect('/profile');
                 }
                 else{ 
                     res.json('Invalid username or password');
@@ -69,16 +73,17 @@ router.get('/bcrypt/:pwd', function (req, res ,next){
 router.get('/register', function(req, res, next){
     res.render('register.njk', {
         title: 'Register',
-        loggedIn: req.session.userId||0
+        loggedIn: req.session.userId||0,
+        admin: req.session.admin
     });
 });
 
 router.post('/register', async function(req, res, next){
     const { firstname, lastname, username, password, passwordConfirmation, } = req.body;
-    if(username.length < 6) {
+    if(username.length > 6) {
         res.json('Username must be at least 6 characters');
     }
-    else if(password.length < 8){
+    else if(password.length > 8){
         res.json('Password must be at least 8 characters');
     }
     else if(firstname.length == 0){
@@ -115,7 +120,8 @@ router.get('/cart', async function(req, res, next){
         title: 'Varukorg',
         loggedIn: req.session.userId||0,
         rows: rows,
-        name: name
+        name: name,
+        admin: req.session.admin
     });
 });
 
@@ -180,6 +186,93 @@ router.post('/placeOrder', async function(req, res, next){
     }
     else{
         res.redirect('/login');
+    }
+});
+
+//profile
+router.get('/profile', async function (req, res, next){
+    if(req.session.loggedin){
+        res.render('profile.njk', { 
+            username: req.session.username,
+            loggedIn: req.session.userId||0,
+            admin: req.session.admin
+        });
+    }
+    else{
+        res.status(401).json('Access denied');
+    }
+});
+
+router.post('/logout', async function(req, res, next){
+    if(req.session.loggedin){
+        req.session.destroy();
+        res.redirect('/')
+    }
+    else{
+        res.status(401).json('Access denied')
+    }
+});
+
+//Admin-sidor
+router.get('/adminProducts', async function (req, res, next){
+    const [rows] = await promisePool.query("SELECT * FROM nt19products");
+    if(req.session.loggedin){
+        res.render('adminProducts.njk', { 
+            username: req.session.username,
+            loggedIn: req.session.userId||0,
+            admin: req.session.admin,
+            rows: rows
+        });
+    }
+    else{
+        res.status(401).json('Access denied');
+    }
+});
+
+router.post('/newProduct', async function(req, res, next){
+    const { name, amount, price, pic } = req.body;
+    if(req.session.loggedin){
+        if(name.length > 2 && amount.length > 0 && price.length > 0 && pic.length > 2) {
+            await promisePool.query('INSERT INTO nt19products (name, amount, price, pic) VALUES (?,?,?,?)', [name, amount, price, pic]);
+            res.redirect('/adminProducts');
+        }
+        else{
+            res.json('All fields are mandatory!');
+        }
+    }
+    else{
+        res.redirect('/login');
+    }
+});
+
+router.post('/updateProduct', async function(req, res, next){
+    const { name, amount, price } = req.body;
+    const productId = await promisePool.query('SELECT * FROM nt19products WHERE name = ?', [name]);
+    if(req.session.loggedin){
+        if(amount.length > 0 && price.length > 0) {
+            await promisePool.query('UPDATE nt19products SET amount = ? WHERE id = ?', [amount, productId[0][0].id]);
+            await promisePool.query('UPDATE nt19products SET price = ? WHERE id = ?', [price, productId[0][0].id]);
+            res.redirect('/adminProducts');
+        }
+        else{
+            res.json('All fields are mandatory!');
+        }
+    }
+    else{
+        res.redirect('/login');
+    }
+});
+
+router.get('/adminOrders', async function (req, res, next){
+    if(req.session.loggedin){
+        res.render('adminOrders.njk', { 
+            username: req.session.username,
+            loggedIn: req.session.userId||0,
+            admin: req.session.admin
+        });
+    }
+    else{
+        res.status(401).json('Access denied');
     }
 });
 

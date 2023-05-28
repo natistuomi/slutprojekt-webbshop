@@ -169,7 +169,7 @@ body main form {
 body main form label {
   margin-bottom: 0.5rem;
 }
-body main form input {
+body main form input, body main form select {
   margin-bottom: 0.5rem;
   padding: 0.5rem;
 }
@@ -221,6 +221,24 @@ body main a {
   color: #85bc44;
   text-decoration: none;
   cursor: pointer;
+}
+body main table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--color-black);
+}
+body main table th, body main table td {
+  padding: 0.5rem;
+  border: 1px solid var(--color-black);
+  text-align: left;
+}
+body main table th {
+  background-color: #282923;
+  color: #ffffff;
+}
+body main table td {
+  background-color: #85bc44;
+  color: #282923;
 }
 body footer {
   display: flex;

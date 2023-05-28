@@ -4,9 +4,14 @@
 <nav>
     <div>
         <a href="/" class="left">Butik</a>
+        {% if admin === 1 %}
+            <a href="/adminProducts" class="right">Lager</a>
+            <a href="/adminOrders" class="right">Beställningar</a>
+        {% endif %}
     </div>
     <div>
         {% if loggedIn != 0 %}
+            <a href="/profile" class="right">Profil</a>
             <a href="/cart" class="right">Varukorg</a>
         {% else %}
             <a href="/login" class="right">Logga in</a>
