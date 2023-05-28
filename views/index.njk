@@ -3,17 +3,20 @@
     <ul>
     {% for row in rows %}
         <li class="product-card">
-            <h2>{{ row.name }}</h2>
-            <p>Lager: {{ row.amount }}</p>
-            <p>Pris: {{ row.price  }}</p>
-            <p>ID: {{ row.id }}</p>
+            <div class="product-inner">
+                <h2>{{ row.name }}</h2>
+                <p>Lager: {{ row.amount }}</p>
+                <p>Pris: {{ row.price  }}</p>
+                <img src="/images/{{ row.pic }}.jfif" alt="värmekudde" class="product-image">
             {% if loggedIn != 0 %}
-                <form action="/addToCart" method="POST">
+            </div>
+                <form action="/addToCart" method="POST" class="form-without-margin">
                     <input type="hidden" name="productId" value="{{ row.id }}">
                     <button type="submit">Lägg i varukorgen</button>
                 </form>
             {% else %}
                 <p class="red-text">Logga in för att handla</p>
+            </div>
             {% endif %}
         </li>
     {% endfor %}

@@ -1,12 +1,16 @@
 {% extends "layout.njk" %}
 {% block content %}
+    <h2>Din varukorg</h2>
     <ul>
     {% for row in rows %}
         <li class="product-card">
-            <h2>{{ name[row.productId-1].name }}</h2>
-            <p>Pris: {{ row.price  }}</p>
-            <p>Antal: {{ row.amount }}</p>
-            <form action="/removeFromCart" method="POST" class="red-button">
+            <div class="product-inner">
+                <h2>{{ name[row.productId-1].name }}</h2>
+                <p>Pris: {{ row.price  }}</p>
+                <p>Antal: {{ row.amount }}</p>
+                <img src="/images/{{ name[row.productId-1].pic }}.jfif" alt="värmekudde" class="product-image">
+            </div>
+            <form action="/removeFromCart" method="POST" class="red-button form-without-margin">
                 <input type="hidden" name="id" value="{{ row.id }}">
                 <button type="submit">Ta bort från varukorgen</button>
             </form>

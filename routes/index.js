@@ -124,13 +124,14 @@ router.post('/addToCart', async function(req, res, next){
     if(req.session.loggedin){
         // if userId AND productId already exists in cart -> add amount
         const oldCart = await promisePool.query('SELECT * FROM nt19cart WHERE userId = ? AND productId = ?', [req.session.userId, productId]);
-        if(oldCart.length > 0){
+        if(oldCart[0].length > 0){
             const newAmount = oldCart[0][0].amount + 1;
             await promisePool.query('UPDATE nt19cart SET amount = ? WHERE userID = ? AND productId = ?', [newAmount, req.session.userId, productId]);
         }
         else{
             await promisePool.query('INSERT INTO nt19cart (userId, productId) VALUES (?, ?)', [req.session.userId, productId]);
         }
+        await promisePool.query('UPDATE nt19products SET amount = amount - 1 WHERE id = ?', [productId]);
         res.redirect('/');
     }
     else{
@@ -140,8 +141,10 @@ router.post('/addToCart', async function(req, res, next){
 
 router.post('/removeFromCart', async function(req, res, next){
     const cartId = req.body.id;
-    console.log(cartId);
     if(req.session.loggedin){
+        const xAmount = await promisePool.query('SELECT * FROM nt19cart WHERE id = ?', [cartId]);
+        const productId = await promisePool.query('SELECT * FROM nt19cart WHERE id = ?', [cartId]);
+        await promisePool.query('UPDATE nt19products SET amount = amount + ? WHERE id = ?', [xAmount[0][0].amount, productId[0][0].productId]);
         await promisePool.query('DELETE FROM nt19cart WHERE id = ?', [cartId]);
         res.redirect('/cart');
     }

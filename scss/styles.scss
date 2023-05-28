@@ -51,11 +51,6 @@ body{
     main{   
         width: min(100ch, 100vw - 2rem);
         margin-top: 1rem;
-        .product-card{
-            background-color: var(--color-white);
-            color: var(--color-main);  
-            margin: 1rem;
-        }
         form{
             display: flex;
             flex-direction: column;
@@ -77,6 +72,38 @@ body{
                 width: 100%;
                 display: flex;
                 align-items: baseline;
+                justify-content: center;
+            }
+        }
+        ul{
+            display: flex;
+            flex-wrap: wrap;
+            .product-card{
+                background-color: var(--color-white);
+                color: var(--color-main);  
+                margin: 1rem;
+                width: min(170px);
+                display: flex;
+                flex-direction: column;
+                border-radius: 20px;
+                .product-image{
+                    width: 150px;
+                    border-radius: 20px;
+                }
+                .form-without-margin{
+                    margin: 0;
+                }
+                .product-inner{
+                    padding: 1rem;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    text-align: center;
+                }
+            }
+        }
+        @media screen and (max-width: 500px){
+            ul{
                 justify-content: center;
             }
         }

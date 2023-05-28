@@ -161,11 +161,6 @@ body main {
   width: min(100ch, 100vw - 2rem);
   margin-top: 1rem;
 }
-body main .product-card {
-  background-color: var(--color-white);
-  color: var(--color-main);
-  margin: 1rem;
-}
 body main form {
   display: flex;
   flex-direction: column;
@@ -189,6 +184,38 @@ body main form .buttons {
   display: flex;
   align-items: baseline;
   justify-content: center;
+}
+body main ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+body main ul .product-card {
+  background-color: var(--color-white);
+  color: var(--color-main);
+  margin: 1rem;
+  width: 170px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+}
+body main ul .product-card .product-image {
+  width: 150px;
+  border-radius: 20px;
+}
+body main ul .product-card .form-without-margin {
+  margin: 0;
+}
+body main ul .product-card .product-inner {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+@media screen and (max-width: 500px) {
+  body main ul {
+    justify-content: center;
+  }
 }
 body main a {
   color: #85bc44;
