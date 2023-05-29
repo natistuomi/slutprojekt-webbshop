@@ -1,0 +1,27 @@
+{% extends "layout.njk" %}
+{% block  content %}
+
+    <h2>Beställning nr {{order.id}}</h2>
+    <p>Kund: {{order.customer}}</p>
+    <p>Summa: {{order.total}}</p>
+
+    <div style="overflow-x:auto;">
+        <table>
+        <tr>
+            <th>Artikelnr</th>
+            <th>Produkt</th>
+            <th>Antal</th>
+            <th>Pris</th>
+        </tr>
+        {% for row in rows %}
+            <tr>
+                <td>{{ items.productId }}</td>
+                <td>{{ name.[items.productId-1].name }}</a></td>
+                <td>{{ items.amount }}</td>
+                <td>?</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+    
+{% endblock %}

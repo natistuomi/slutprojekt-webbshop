@@ -1,0 +1,26 @@
+{% extends "layout.njk" %}
+{% block  content %}
+
+    <h1>Beställningar</h1>
+
+    <div style="overflow-x:auto;">
+        <table>
+        <tr>
+            <th>Id</th>
+            <th>Kund</th>
+            <th>Datum</th>
+            <th>Summa</th>
+        </tr>
+        {% for row in rows %}
+            <tr>
+                <td><a href="/order/{{row.id}}">{{ row.id }}</a></td>
+                <td><a href="/order/{{row.id}}">{{ row.customer }}</a></td>
+                <td><a href="/order/{{row.id}}">{{ row.dated }}</a></td>
+                <td><a href="/order/{{row.id}}">{{ row.total }}</a></td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+
+    
+{% endblock %}

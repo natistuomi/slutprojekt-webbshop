@@ -6,14 +6,14 @@ const session = require('express-session');
 const { render } = require('nunjucks');
 const validator = require('validator');
 const { runInNewContext } = require('vm');
-const { Console } = require('console');
+const { Console, profile } = require('console');
 const promisePool = pool.promise();
 
 //router för förstasidan
 router.get('/', async function(req, res, next){
     const [rows] = await promisePool.query("SELECT * FROM nt19products");
     res.render('index.njk', {
-        title: 'Homepage',
+        title: 'Butik',
         rows: rows,
         loggedIn: req.session.userId||0,
         admin: req.session.admin
@@ -80,10 +80,10 @@ router.get('/register', function(req, res, next){
 
 router.post('/register', async function(req, res, next){
     const { firstname, lastname, username, password, passwordConfirmation, } = req.body;
-    if(username.length > 6) {
+    if(username.length < 6) {
         res.json('Username must be at least 6 characters');
     }
-    else if(password.length > 8){
+    else if(password.length < 8){
         res.json('Password must be at least 8 characters');
     }
     else if(firstname.length == 0){
@@ -193,6 +193,7 @@ router.post('/placeOrder', async function(req, res, next){
 router.get('/profile', async function (req, res, next){
     if(req.session.loggedin){
         res.render('profile.njk', { 
+            title: "Profil",
             username: req.session.username,
             loggedIn: req.session.userId||0,
             admin: req.session.admin
@@ -218,6 +219,7 @@ router.get('/adminProducts', async function (req, res, next){
     const [rows] = await promisePool.query("SELECT * FROM nt19products");
     if(req.session.loggedin){
         res.render('adminProducts.njk', { 
+            title: "Produkter",
             username: req.session.username,
             loggedIn: req.session.userId||0,
             admin: req.session.admin,
@@ -264,16 +266,36 @@ router.post('/updateProduct', async function(req, res, next){
 });
 
 router.get('/adminOrders', async function (req, res, next){
+    const [rows] = await promisePool.query("SELECT * FROM nt19orders");
     if(req.session.loggedin){
         res.render('adminOrders.njk', { 
+            title: "Beställningar",
             username: req.session.username,
             loggedIn: req.session.userId||0,
-            admin: req.session.admin
+            admin: req.session.admin,
+            rows: rows
         });
     }
     else{
         res.status(401).json('Access denied');
     }
+});
+
+router.get('/order/:id', async function (req, res, next){
+    const orderId = req.params.id;
+    const order = await promisePool.query('SELECT * FROM nt19orders WHERE id = ' + [orderId]);
+    const items = await promisePool.query('SELECT * FROM nt19orderedProducts WHERE orderId = ?', [orderId]);
+    const [name] = await promisePool.query('SELECT * FROM nt19products');
+    res.render('order.njk', { 
+        order: order[0][0], 
+        title: 'Beställning',
+        orderId: orderId,
+        loggedIn: req.session.userId||0,
+        username: req.session.username,
+        admin: req.session.admin,
+        items: items,
+        name: name
+    }); 
 });
 
 module.exports = router;

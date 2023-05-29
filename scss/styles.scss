@@ -122,12 +122,15 @@ body{
                 text-align: left;
             }
             th{
-                background-color: #282923;
-                color: #ffffff;
+                background-color: var(--color-black);
+                color: var(--color-white);
             }
             td{
-                background-color: #85bc44;
-                color: #282923;
+                background-color: var(--color-light);
+                color: var(--color-black);
+                a{
+                    color: var(--color-black);
+                }
             }
         }
     }
