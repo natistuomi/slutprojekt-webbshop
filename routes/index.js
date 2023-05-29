@@ -281,21 +281,4 @@ router.get('/adminOrders', async function (req, res, next){
     }
 });
 
-router.get('/order/:id', async function (req, res, next){
-    const orderId = req.params.id;
-    const order = await promisePool.query('SELECT * FROM nt19orders WHERE id = ' + [orderId]);
-    const items = await promisePool.query('SELECT * FROM nt19orderedProducts WHERE orderId = ?', [orderId]);
-    const [name] = await promisePool.query('SELECT * FROM nt19products');
-    res.render('order.njk', { 
-        order: order[0][0], 
-        title: 'Beställning',
-        orderId: orderId,
-        loggedIn: req.session.userId||0,
-        username: req.session.username,
-        admin: req.session.admin,
-        items: items,
-        name: name
-    }); 
-});
-
 module.exports = router;

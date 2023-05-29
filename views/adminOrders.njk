@@ -13,10 +13,10 @@
         </tr>
         {% for row in rows %}
             <tr>
-                <td><a href="/order/{{row.id}}">{{ row.id }}</a></td>
-                <td><a href="/order/{{row.id}}">{{ row.customer }}</a></td>
-                <td><a href="/order/{{row.id}}">{{ row.dated }}</a></td>
-                <td><a href="/order/{{row.id}}">{{ row.total }}</a></td>
+                <td>{{ row.id }}</td>
+                <td>{{ row.customer }}</td>
+                <td>{{ row.dated }}</td>
+                <td>{{ row.total }}</td>
             </tr>
         {% endfor %}
         </table>
