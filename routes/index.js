@@ -7,6 +7,7 @@ const { render } = require('nunjucks');
 const validator = require('validator');
 const { runInNewContext } = require('vm');
 const { Console, profile } = require('console');
+const { ADDRGETNETWORKPARAMS } = require('dns');
 const promisePool = pool.promise();
 
 //router för förstasidan
@@ -114,19 +115,28 @@ router.post('/register', async function(req, res, next){
 
 //router för varukorgen
 router.get('/cart', async function(req, res, next){
-    const [rows] = await promisePool.query('SELECT * FROM nt19cart WHERE nt19cart.userId = ?', [req.session.userId]);
+    const [rows] = await promisePool.query('SELECT * FROM nt19cart WHERE userId = ?', [req.session.userId]);
     const [name] = await promisePool.query('SELECT * FROM nt19products');
+    const products = await promisePool.query('SELECT * FROM nt19cart WHERE userId = ?', [req.session.userId]);
+    let total = 0;
+    for(let i = 0; i < products[0].length; i++){
+        total += (products[0][i].amount * products[0][i].price);
+        console.log("1. " + products[0][i].amount);
+        console.log("2. " + products[0][i].price);
+    }
     res.render('cart.njk', {
         title: 'Varukorg',
         loggedIn: req.session.userId||0,
         rows: rows,
         name: name,
-        admin: req.session.admin
+        admin: req.session.admin,
+        total: total
     });
 });
 
 router.post('/addToCart', async function(req, res, next){
     const productId = req.body.productId;
+    const price = await promisePool.query('SELECT nt19products.price FROM nt19products WHERE nt19products.id = ?', [productId]);
     if(req.session.loggedin){
         // if userId AND productId already exists in cart -> add amount
         const oldCart = await promisePool.query('SELECT * FROM nt19cart WHERE userId = ? AND productId = ?', [req.session.userId, productId]);
@@ -135,7 +145,7 @@ router.post('/addToCart', async function(req, res, next){
             await promisePool.query('UPDATE nt19cart SET amount = ? WHERE userID = ? AND productId = ?', [newAmount, req.session.userId, productId]);
         }
         else{
-            await promisePool.query('INSERT INTO nt19cart (userId, productId) VALUES (?, ?)', [req.session.userId, productId]);
+            await promisePool.query('INSERT INTO nt19cart (userId, productId, price) VALUES (?, ?, ?)', [req.session.userId, productId, price[0][0].price]);
         }
         await promisePool.query('UPDATE nt19products SET amount = amount - 1 WHERE id = ?', [productId]);
         res.redirect('/');
@@ -169,7 +179,7 @@ router.post('/placeOrder', async function(req, res, next){
     const customer = names[0][0].firstname + " " + names[0][0].lastname;
     const products = await promisePool.query('SELECT * FROM nt19cart WHERE userId = ?', [req.session.userId]);
     let total = 0;
-    for(let i = 0; i < products.length; i++){
+    for(let i = 0; i < products[0].length; i++){
         total += (products[0][i].amount * products[0][i].price);
     }
     if(req.session.loggedin){
